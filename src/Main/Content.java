@@ -16,7 +16,7 @@ public class Content extends JPanel implements ActionListener, KeyListener, Mous
     //player rope mechanic
     private static boolean anchorState = false;
     private static Anchor anchor = new Anchor(0, 0, 0, 0);
-
+    private static int anchorRadius;
 
     public Content() {
         t = new Timer(5, this);
@@ -31,8 +31,11 @@ public class Content extends JPanel implements ActionListener, KeyListener, Mous
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawRect(player.getX()-player.getSize()/2, player.getY()-player.getSize()/2, player.getSize(), player.getSize());
-        if(anchorState)
+        if(anchorState) {
             g.drawLine(anchor.getStartX(), anchor.getStartY(), anchor.getEndX(), anchor.getEndY());
+            g.drawOval(anchor.getEndX() - anchorRadius , anchor.getEndY() - anchorRadius , anchorRadius*2, anchorRadius*2);
+        }
+//        System.out.println(anchor.getDistance());
     }
 
     @Override
@@ -40,6 +43,8 @@ public class Content extends JPanel implements ActionListener, KeyListener, Mous
         //resetting the anchor starting points every frame
         anchor.setStartX(player.getX());
         anchor.setStartY(player.getY());
+        anchorRadius = (int) Math.sqrt(Math.abs(Math.pow(anchor.getStartX() - anchor.getEndX(), 2) + Math.pow(anchor.getStartY() - anchor.getEndY(), 2)));
+
         repaint();
     }
 
